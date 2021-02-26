@@ -48,17 +48,20 @@ namespace DownloadEverything
             var nodes = doc.DocumentNode.SelectNodes("//a[@href]").Where(Filter).ToArray();
             Console.WriteLine($"Found {nodes.Length} files to download.");
 
+            Console.WriteLine($"Will fetch data from {uri}.");
+            Console.WriteLine($"And save files to {folder}.");
+
             int count = 0;
             foreach (HtmlNode link in nodes)
             {
                 count++;
                 var href = HttpUtility.HtmlDecode(link.Attributes["href"].Value);
                 var name = GetName(link);
-                Console.WriteLine($"Will download file {name} {href}.");
+                Console.WriteLine($"Will download file #{count} {name}.");
                 var filename = Path.Combine(folder, name);
                 var result = await DownloadFile(href);
                 File.WriteAllBytes(filename, result);
-                Console.WriteLine($"Finished downloading file {count}/{nodes.Length}.");
+                Console.WriteLine($"Finished downloading file {count} of {nodes.Length}.");
             }
             Console.WriteLine($"Finished downloading {nodes.Length} files. Press any key to continue.");
             Console.ReadKey();
