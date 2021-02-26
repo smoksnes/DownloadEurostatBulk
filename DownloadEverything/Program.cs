@@ -20,8 +20,9 @@ namespace DownloadEverything
 
             if (args.Length == 0)
             {
+                // Default uri
                 uri =
-                    @"https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?sort=1&dir=comext%2FCOMEXT_DATA%2FPRODUCTS";
+                    @"https://ec.europa.eu/eurostat/estat-navtree-portlet-prod/BulkDownloadListing?dir=comext%2FCOMEXT_DATA%2FPRODUCTS";
                 folder = @"C:\Temp\Hack2021";
             }
             else if (args.Length == 1)
@@ -41,16 +42,15 @@ namespace DownloadEverything
                 return;
             }
 
+            Console.WriteLine($"Will fetch data from {uri}.");
+            Console.WriteLine($"And save files to {folder}.");
 
             HtmlWeb hw = new HtmlWeb();
             HtmlDocument doc = hw.Load(uri);
 
             var nodes = doc.DocumentNode.SelectNodes("//a[@href]").Where(Filter).ToArray();
             Console.WriteLine($"Found {nodes.Length} files to download.");
-
-            Console.WriteLine($"Will fetch data from {uri}.");
-            Console.WriteLine($"And save files to {folder}.");
-
+            
             int count = 0;
             foreach (HtmlNode link in nodes)
             {
